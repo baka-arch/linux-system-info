@@ -2,6 +2,10 @@
 
 A lightweight Linux system information utility written in C++ for Linux.
 
+## Preview
+
+![Linux System Information](assets/Screenshot.png)
+
 ## Features
 
 - Operating System
