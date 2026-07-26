@@ -32,7 +32,7 @@ make
 ## Run
 
 ```bash
-./systeminfo
+./linux-system-info
 ```
 ## Requirements
 
