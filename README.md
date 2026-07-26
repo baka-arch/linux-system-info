@@ -73,3 +73,4 @@ Memory           : 10.65 / 14.93 GB
 - [ ] Network Interfaces
 - [ ] CPU Usage
 - [ ] JSON Output
+
