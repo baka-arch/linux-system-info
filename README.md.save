@@ -1,0 +1,14 @@
+ x86_64
+CPU              : AMD Ryzen 7 7735HS with Radeon Graphics
+Memory           : 10.65 / 14.93 GB
+```
+
+## Future Improvements
+
+- [ ] System Uptime
+- [ ] Disk Usage
+- [ ] Battery Information
+- [ ] Network Interfaces
+- [ ] CPU Usage
+- [ ] JSON Output
+>>>>>>> d105fbb (Add project screenshot and update README)
