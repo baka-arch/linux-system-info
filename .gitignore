@@ -1,5 +1,6 @@
 # Compiled executable
 systeminfo
+linux-system-info
 
 # Object files
 *.o
