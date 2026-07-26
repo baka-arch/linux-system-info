@@ -6,7 +6,7 @@ SRC = src/main.cpp \
       src/cpu.cpp \
       src/memory.cpp
 
-TARGET = systeminfo
+TARGET = linux-system-info
 
 $(TARGET): $(SRC)
 	$(CXX) $(CXXFLAGS) $(SRC) -o $(TARGET)

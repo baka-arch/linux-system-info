@@ -34,6 +34,21 @@ make
 ```bash
 ./systeminfo
 ```
+## Requirements
+
+- Linux
+- C++17 compatible compiler (GCC 8+ or Clang 7+)
+- GNU Make
+
+## Build
+
+```bash
+git clone https://github.com/baka-arch/linux-system-info.git
+cd linux-system-info
+make
+./linux-system-info
+```
+
 
 ## Example Output
 
