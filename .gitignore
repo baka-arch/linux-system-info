@@ -1,0 +1,18 @@
+# Compiled executable
+systeminfo
+
+# Object files
+*.o
+
+# Build directory
+build/
+
+# VS Code
+.vscode/
+
+# CLion
+.idea/
+cmake-build-*
+
+# Temporary editor files
+*.swp
