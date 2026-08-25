@@ -6,6 +6,7 @@
 #include <array>
 #include <cstdio>
 #include <map>
+#include <cstring>
 
 using namespace std;
 
@@ -69,6 +70,80 @@ string resolveNameFromPciIds(const string &vendor, const string &device)
     return "Unknown GPU (" + vendor + ":" + device + ")";
 }
 
+// Clean an lspci-style device string down to just the GPU model name,
+// e.g. "NVIDIA Corporation AD107M [GeForce RTX 4050 Max-Q / Mobile]"
+//   -> "GeForce RTX 4050"
+//    "Advanced Micro Devices, Inc. [AMD/ATI] Rembrandt [Radeon 680M]"
+//   -> "Radeon 680M"
+string cleanGpuName(string name)
+{
+    // Prefer the text inside the square brackets (the marketing name),
+    // skipping the "[AMD/ATI]"-style vendor tag.
+    size_t best = string::npos;
+    size_t pos = 0;
+    while ((pos = name.find('[', pos)) != string::npos)
+    {
+        size_t close = name.find(']', pos);
+        if (close == string::npos)
+            break;
+        string candidate = name.substr(pos + 1, close - pos - 1);
+        // Skip short vendor tags like "AMD/ATI" or "VGA controller".
+        if (candidate.size() <= 12 && candidate.find('/') != string::npos)
+        {
+            pos = close + 1;
+            continue;
+        }
+        best = pos;
+        break;
+        pos = close + 1;
+    }
+
+    if (best != string::npos)
+    {
+        size_t start = name.find('[', best);
+        size_t end = name.find(']', start);
+        name = name.substr(start + 1, end - start - 1);
+    }
+    else
+    {
+        // No useful brackets: drop common vendor prefixes.
+        const char *prefixes[] = {
+            "NVIDIA Corporation ",
+            "Advanced Micro Devices, Inc. ",
+            "Intel Corporation ",
+        };
+        for (const char *p : prefixes)
+        {
+            size_t plen = strlen(p);
+            if (name.compare(0, plen, p) == 0)
+            {
+                name = name.substr(plen);
+                break;
+            }
+        }
+    }
+
+    // Drop variant suffixes like "Max-Q / Mobile", "Mobile", "M".
+    const char *suffixes[] = {" Max-Q / Mobile", " Max-Q", " Mobile", " M"};
+    bool changed = true;
+    while (changed)
+    {
+        changed = false;
+        for (const char *s : suffixes)
+        {
+            size_t slen = strlen(s);
+            if (name.size() > slen &&
+                name.compare(name.size() - slen, slen, s) == 0)
+            {
+                name.resize(name.size() - slen);
+                changed = true;
+            }
+        }
+    }
+
+    return trim(name);
+}
+
 vector<GpuInfo> detectGPUsFromSysfs()
 {
     vector<GpuInfo> gpus;
@@ -82,7 +157,8 @@ vector<GpuInfo> detectGPUsFromSysfs()
             continue;
 
         GpuInfo info;
-        info.name = resolveNameFromPciIds(vendor, readSysfs(base + "/device"));
+        string raw = resolveNameFromPciIds(vendor, readSysfs(base + "/device"));
+        info.name = cleanGpuName(raw);
         info.type = isDiscrete(vendor) ? "Discrete" : "Integrated";
         gpus.push_back(info);
     }
@@ -119,17 +195,18 @@ vector<GpuInfo> getGPUInfo()
                     continue;
 
                 GpuInfo info;
-                info.name = trim(line.substr(pos + 2));
+                string raw = trim(line.substr(pos + 2));
 
                 // Strip the trailing kernel-driver annotation lspci adds,
-                // e.g. "(rev a1)" or "(prog-if 00 [VGA controller])".
-                size_t rev = info.name.find("(rev ");
+                // e.g. "(rev a1)".
+                size_t rev = raw.find("(rev ");
                 if (rev != string::npos)
-                    info.name = trim(info.name.substr(0, rev));
+                    raw = trim(raw.substr(0, rev));
 
-                info.type = (info.name.find("NVIDIA") != string::npos)
+                info.type = (raw.find("NVIDIA") != string::npos)
                                 ? "Discrete"
                                 : "Integrated";
+                info.name = cleanGpuName(raw);
                 gpus.push_back(info);
             }
         }

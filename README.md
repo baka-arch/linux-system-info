@@ -64,8 +64,8 @@ Kernel Release   : 6.18.38-3-lts
 Architecture     : x86_64
 CPU              : AMD Ryzen 7 7735HS with Radeon Graphics
 Memory           : 10.65 / 14.93 GB
-GPU              : NVIDIA GeForce RTX 4050 Laptop GPU (Discrete)
-                 : AMD Radeon 680M (Integrated)
+GPU              : GeForce RTX 4050 (Discrete)
+                   Radeon 680M (Integrated)
 ```
 
 ## Future Improvements
