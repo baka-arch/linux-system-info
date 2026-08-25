@@ -15,6 +15,7 @@ A lightweight Linux system information utility written in C++ for Linux.
 - CPU Information
 - Memory Usage
 - GPU Information (Integrated + Discrete)
+- Battery Status (Percentage + Charging State)
 
 ## Technologies
 

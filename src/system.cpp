@@ -2,6 +2,7 @@
 #include "cpu.h"
 #include "memory.h"
 #include "gpu.h"
+#include "battery.h"
 #include <vector>
 #include <iostream>
 #include <sys/utsname.h>
@@ -51,6 +52,19 @@ if(uname(&systemInfo)==0){
              << gpus[i].name
              << " (" << gpus[i].type << ")"
              << endl;
+    }
+
+    BatteryInfo battery = getBatteryInfo();
+    if (battery.present) {
+        cout << "Battery          : "
+             << battery.percent << "%";
+        if (battery.status == "Charging")
+            cout << " (Charging)";
+        else if (battery.status == "Discharging")
+            cout << " (Discharging)";
+        else if (!battery.status.empty())
+            cout << " (" << battery.status << ")";
+        cout << endl;
     }
 }
 else

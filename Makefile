@@ -6,7 +6,8 @@ SRC = src/main.cpp \
       src/cpu.cpp \
       src/memory.cpp \
       src/gpu.cpp \
-      src/os.cpp
+      src/os.cpp \
+      src/battery.cpp
 
 TARGET = linux-system-info
 
