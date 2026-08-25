@@ -1,6 +1,8 @@
 #include "system.h"
 #include "cpu.h"
 #include "memory.h"
+#include "gpu.h"
+#include <vector>
 #include <iostream>
 #include <sys/utsname.h>
 #include <iomanip>
@@ -42,6 +44,15 @@ if(uname(&systemInfo)==0){
         << totalGB
         << " GB"
         << endl;
+
+    vector<GpuInfo> gpus = getGPUInfo();
+    for (size_t i = 0; i < gpus.size(); ++i)
+    {
+        cout << (i == 0 ? "GPU              : " : "                   ")
+             << gpus[i].name
+             << " (" << gpus[i].type << ")"
+             << endl;
+    }
 }
 else
 {

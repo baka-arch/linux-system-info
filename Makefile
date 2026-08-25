@@ -4,7 +4,8 @@ CXXFLAGS = -Wall -Wextra -std=c++17 -Iinclude
 SRC = src/main.cpp \
       src/system.cpp \
       src/cpu.cpp \
-      src/memory.cpp
+      src/memory.cpp \
+      src/gpu.cpp
 
 TARGET = linux-system-info
 
