@@ -24,8 +24,7 @@ if(uname(&systemInfo)==0){
     cout << "        Linux System Information\n";
     cout << "==========================================\n\n";
     cout << "\033[0m";
-    cout << "Operating System : "
-    << systemInfo.sysname << endl;
+    cout << "Operating System : " << getOSName() << endl;
     cout << "Hostname         : "
     << systemInfo.nodename << endl;
     cout << "Kernel Release   : "
